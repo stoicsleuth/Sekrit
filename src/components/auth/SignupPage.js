@@ -3,14 +3,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createUseStyles } from 'react-jss'
-import { signInAction } from '../../store/actions/authActions'
+import { signupAction } from '../../store/actions/authActions'
 import pattern from '../../constants/heroPattern'
 import LoginBlob from '../blobs/LoginBlob'
-import LoginForm from '../forms/LoginForm'
+import SignupForm from '../forms/SignupForm'
 import Progress from '../progressbar/Progress'
 
 const useStyles = createUseStyles(() => ({
-  loginPage: {
+  signupPage: {
     backgroundColor: '#2d3159',
     backgroundImage: `url("${pattern}")`,
     height: '100vh',
@@ -27,11 +27,11 @@ const callFakeAPI = (delay) => (
   })
 )
 
-const LoginPage = () => {
+const SignupPage = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
   const signIn = useCallback(
-    (credentials) => dispatch(signInAction(credentials)),
+    (credentials) => dispatch(signupAction(credentials)),
     [ dispatch ]
   )
   const [ isLoading, setIsLoading ] = useState(true)
@@ -49,12 +49,12 @@ const LoginPage = () => {
   }
 
   return (
-    <div className={classes.loginPage}>
+    <div className={classes.signupPage}>
       <Progress isAnimating={isLoading} />
       <LoginBlob />
-      <LoginForm onFormSubmit={handleSubmit} />
+      <SignupForm onFormSubmit={handleSubmit} />
     </div>
   )
 }
 
-export default LoginPage
+export default SignupPage

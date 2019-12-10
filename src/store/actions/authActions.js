@@ -1,6 +1,5 @@
 const signInAction = (credentials) => (dispatch, getState, { getFirebase }) => {
   const firebase = getFirebase()
-  console.log(firebase)
   firebase.login({
     email: credentials.email,
     password: credentials.password
@@ -13,4 +12,29 @@ const signInAction = (credentials) => (dispatch, getState, { getFirebase }) => {
   })
 }
 
-export default signInAction
+const signOutAction = () => (dispatch, getState, { getFirebase }) => {
+  const firebase = getFirebase()
+  console.log(firebase)
+  firebase.logout()
+  dispatch({ type: 'LOGOUT_SUCCESS' })
+}
+
+const signupAction = ({ email, password, name }) => (dispatch, getState, { getFirebase }) => {
+  const firebase = getFirebase()
+  firebase.createUser(
+    { email, password },
+    { name, email }
+  ).then(() => {
+    dispatch({ type: 'SIGNUP_SUCCESS' })
+  }).catch((err) => {
+    console.log(err)
+    dispatch({ type: 'SIGNUP_ERROR', err })
+  })
+}
+
+
+export {
+  signInAction,
+  signOutAction,
+  signupAction
+}
