@@ -16,7 +16,8 @@ const useStyles = createUseStyles(() => ({
     justifyContent: 'space-around',
     width: 400,
     zIndex: 1,
-    padding: 15
+    padding: 15,
+    margin: [ 200, 0 ]
   },
   signupButton: {
     padding: [ 10, 55 ],
