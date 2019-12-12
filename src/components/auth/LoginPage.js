@@ -50,7 +50,7 @@ const LoginPage = () => {
 
   const handleSubmit = (credentials) => {
     signIn(credentials)
-    // To handle cases where authError value doesn't change but login stil fails
+    // TODO handle cases where authError value doesn't change but login stil fails
     if (authError) {
       toast.error(authError)
     }
