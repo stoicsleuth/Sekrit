@@ -67,7 +67,7 @@ const Footer = () => {
       </div>
       <div className={classes.makeshiftLogo}>
         <span className={classes.makeshiftLogoText}>D&S</span>
-        <h4>Dynamide & Sloppiness</h4>
+        <h4>Dynamite & Sloppiness</h4>
       </div>
     </footer>
   )
