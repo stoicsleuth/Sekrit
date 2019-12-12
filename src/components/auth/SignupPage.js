@@ -16,7 +16,7 @@ const useStyles = createUseStyles(() => ({
   signupPage: {
     backgroundColor: '#2d3159',
     backgroundImage: `url("${pattern}")`,
-    height: '100vh',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
