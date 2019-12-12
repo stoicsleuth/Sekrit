@@ -1,16 +1,19 @@
-const createProfile = ({ firestore }, todo) => {
+const addProfileDetailsAction = (firestore, profileId, profile) => {
+  profile.country = 'India'
+  profile.exchange = 'SS19'
+  profile.id = profileId
+
   return (dispatch) => {
     firestore
-      .collection("todos")
-      .add(todo)
+      .collection('profiles')
+      .add(profile)
       .then(() => {
-        console.log("Then it was done");
-        dispatch({ type: 'CREATE_PROFILE', todo });
+        dispatch({ type: 'ADD_PROFILE', profile })
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
-      });
-  };
+      })
+  }
 }
 
-export default createProfile
+export default addProfileDetailsAction

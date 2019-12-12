@@ -88,7 +88,7 @@ const Navbar = () => {
       {!isLoggedOut
         && (
           <div>
-            <Link to="/logout" onClick={() => signOut()} type="button" className={classes.signUpButton}>Log Out</Link>
+            <Link to="/" onClick={() => signOut()} type="button" className={classes.signUpButton}>Log Out</Link>
           </div>
         )}
     </div>

@@ -26,7 +26,8 @@ const useStyles = createUseStyles(() => ({
     background: '#6e30b3',
     color: 'white',
     outline: 'none',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    cursor: 'pointer'
   },
   formText: {
     color: '#fff',

@@ -18,7 +18,7 @@ const useStyles = createUseStyles(() => ({
     zIndex: 1,
     padding: 15
   },
-  loginButton: {
+  signupButton: {
     padding: [ 10, 55 ],
     fontFamily: 'Lato',
     fontSize: 15,
@@ -26,7 +26,8 @@ const useStyles = createUseStyles(() => ({
     background: '#6e30b3',
     color: 'white',
     outline: 'none',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    cursor: 'pointer'
   },
   formText: {
     color: '#fff',
@@ -98,7 +99,7 @@ const SignupForm = ({ onFormSubmit }) => {
             label="LOG IN"
             disabled={submitting}
             type="submit"
-            className={classes.loginButton}
+            className={classes.signupButton}
           >
             Sign Up
           </button>

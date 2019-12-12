@@ -143,7 +143,7 @@ const DashboardPage = () => {
       <div className={classes.exchanges}>
         <h4>Choose From the ongoing Gift-Exchanges!</h4>
         {exchanges && exchanges.map((exchange) => (
-          <div className={classes.exchangeCard}>
+          <div key={exchanges.name} className={classes.exchangeCard}>
             <div className={classes.exchangeCardInfo}>
               <img src={`/static/icons/${exchange.img}.png`} alt="exchange" />
               <div className={classes.exchangeCardType}>

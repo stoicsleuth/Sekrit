@@ -1,6 +1,16 @@
-import React from 'react'
 import { createUseStyles } from 'react-jss'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback } from 'react'
+import { Route, Link, useRouteMatch } from 'react-router-dom'
+import { useFirestore } from 'react-redux-firebase'
+
+import ExchangeInputForm from '../../forms/ExchangeInputForm'
 import SantaWave from '../../blobs/SantaWave'
+import addProfileDetailsAction from '../../../store/actions/profileActions'
+import Progress from '../../progressbar/Progress'
+import useProgressBar from '../../progressbar/useProgressBar'
+import Dots from '../../Dots'
+import MatchPage from './MatchPage'
 
 const useStyles = createUseStyles(() => ({
   santaWrapper: {
@@ -48,19 +58,18 @@ const useStyles = createUseStyles(() => ({
   santaStepsDesc: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: 80,
-
-    '& div': {
-      display: 'flex',
-      width: 330,
-      height: 184,
-      background: '#1f2142',
-      borderRadius: 18,
-      boxShadow: '0 0.5rem 0.75rem -0.25rem rgba(12, 12, 12, 0.5)',
-      position: 'relative',
-      margin: 20,
-      padding: 30
-    }
+    margin: 80
+  },
+  santaStep: {
+    display: 'flex',
+    width: 330,
+    height: 184,
+    background: '#1f2142',
+    borderRadius: 18,
+    boxShadow: '0 0.5rem 0.75rem -0.25rem rgba(12, 12, 12, 0.5)',
+    position: 'relative',
+    margin: 20,
+    padding: 30
   },
   santaStepImages: {
     width: 130
@@ -80,6 +89,30 @@ const useStyles = createUseStyles(() => ({
     marginLeft: 15,
     zIndex: 1
   },
+  '@media (min-width: 1600px)': {
+    santaHeader: {
+      height: 700
+    }
+  },
+  '@media (max-width: 800px)': {
+    santaHeader: {
+      height: 500,
+
+      '& span': {
+        fontSize: 25,
+        borderWidth: 5
+      },
+
+      '& div': {
+        bottom: -8
+      }
+    },
+    santaSteps: {
+      '& span:first-child': {
+        fontSize: 21
+      }
+    }
+  },
   '@keyframes snow': {
     '0%': 'background-position:0 0,0 0,0 0',
     '50%': 'background-position:500px 500px,100px 200px,-100px 150px',
@@ -89,9 +122,25 @@ const useStyles = createUseStyles(() => ({
 
 const SantaIndexPage = () => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+  const fireStore = useFirestore()
+  const match = useRouteMatch()
+  const isLoading = useProgressBar()
+
+  const profileId = useSelector((state) => state.firebase.auth.uid)
+
+  const signIn = useCallback(
+    (credentials) => dispatch(addProfileDetailsAction(fireStore, profileId, credentials)),
+    [ dispatch, fireStore, profileId ]
+  )
+
+  const handleSubmit = (credentials) => {
+    signIn(credentials)
+  }
 
   return (
     <div className={classes.santaWrapper}>
+      <Progress isAnimating={isLoading} />
       <div className={classes.santaHeader}>
         <span>Secret Santa 2019</span>
         <SantaWave />
@@ -99,23 +148,44 @@ const SantaIndexPage = () => {
       <div className={classes.santaSteps}>
         <span>Here are the 3 steps for you</span>
         <div className={classes.santaStepsDesc}>
-          <div className={classes.santaStepOne}>
-            <h2 className={classes.santaStepNum}>1</h2>
-            <img className={classes.santaStepImages} src="/static/icons/fillform.svg" alt="xmas" />
-            <span className={classes.santaStepText}>Fill up your details for matching</span>
-          </div>
-          <div className={classes.santaStepTwo}>
-            <h2 className={classes.santaStepNum}>2</h2>
-            <img className={classes.santaStepImages} src="/static/icons/xmas.svg" alt="xmas" />
-            <span className={classes.santaStepText}>Retrive your match and sne your gift</span>
-          </div>
-          <div className={classes.santaStepThree}>
+          <Link to="/santa/profile">
+            <div className={classes.santaStep}>
+              <h2 className={classes.santaStepNum}>1</h2>
+              <img className={classes.santaStepImages} src="/static/icons/fillform.svg" alt="xmas" />
+              <span className={classes.santaStepText}>Fill up your details for matching</span>
+              <Dots />
+            </div>
+          </Link>
+          <Link to="/santa/match">
+            <div className={classes.santaStep}>
+              <h2 className={classes.santaStepNum}>2</h2>
+              <img className={classes.santaStepImages} src="/static/icons/xmas.svg" alt="xmas" />
+              <span className={classes.santaStepText}>Retrive your match and send your gift</span>
+              <Dots color="#ffff00" />
+            </div>
+          </Link>
+          <div className={classes.santaStep}>
             <h2 className={classes.santaStepNum}>3</h2>
             <img className={classes.santaStepImages} src="/static/icons/celebration.svg" alt="xmas" />
-            <span className={classes.santaStepText}>Sit back and wait for your Santa to surprise you</span>
+            <span className={classes.santaStepText}>
+              Sit back and wait for your Santa to surprise you
+            </span>
+            <Dots color="#ffff00" />
           </div>
         </div>
       </div>
+      <Route
+        path={`${match.path}/profile`}
+        render={(props) => (
+          <ExchangeInputForm onFormSubmit={handleSubmit} {...props} />
+        )}
+      />
+      <Route
+        path={`${match.path}/match`}
+        render={() => (
+          <MatchPage />
+        )}
+      />
     </div>
   )
 }

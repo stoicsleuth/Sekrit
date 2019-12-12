@@ -1,11 +1,13 @@
 const profileReducer = (state = {}, action) => {
-  switch(action.type){
-    case 'CREATE_PROFILE':
-    console.log('abc')
-    return state
+  switch (action.type) {
+    case 'ADD_PROFILE':
+      return {
+        ...state
+      }
     default:
-    console.log('bca')
-    return state
+      return {
+        ...state
+      }
   }
 }
 

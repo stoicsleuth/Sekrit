@@ -1,13 +1,16 @@
 /* eslint-disable no-new */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { createUseStyles } from 'react-jss'
+import { useHistory } from 'react-router-dom'
+
 import { signupAction } from '../../store/actions/authActions'
 import pattern from '../../constants/heroPattern'
 import LoginBlob from '../blobs/LoginBlob'
 import SignupForm from '../forms/SignupForm'
 import Progress from '../progressbar/Progress'
+import useProgressBar from '../progressbar/useProgressBar'
 
 const useStyles = createUseStyles(() => ({
   signupPage: {
@@ -21,27 +24,21 @@ const useStyles = createUseStyles(() => ({
   }
 }))
 
-const callFakeAPI = (delay) => (
-  new Promise((resolve) => {
-    setTimeout(resolve, delay)
-  })
-)
-
 const SignupPage = () => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const history = useHistory()
   const signIn = useCallback(
     (credentials) => dispatch(signupAction(credentials)),
     [ dispatch ]
   )
-  const [ isLoading, setIsLoading ] = useState(true)
+  const isLoading = useProgressBar()
 
-  useEffect(() => {
-    (async () => {
-      await callFakeAPI(3000)
-      setIsLoading(false)
-    })()
-  }, [])
+  const profile = useSelector((state) => state.firebase.profile)
+
+  if (!profile.isEmpty) {
+    history.push('/dashboard')
+  }
 
 
   const handleSubmit = (credentials) => {

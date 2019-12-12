@@ -12,6 +12,7 @@ import 'firebase/firestore'
 import 'firebase/auth'
 import React from 'react'
 import thunk from 'redux-thunk'
+import { toast } from 'react-toastify'
 
 import LoginPage from './components/auth/LoginPage'
 import SignupPage from './components/auth/SignupPage'
@@ -22,6 +23,13 @@ import AuthIsLoaded from './components/auth/AuthIsLoaded'
 import { firebaseConfig } from './config/fbConfig'
 import DashboardPage from './components/pages/Dashboard/Index'
 import SantaIndexPage from './components/pages/Santa/Index'
+import LandingPage from './components/pages/Landing/Index'
+
+import 'react-toastify/dist/ReactToastify.min.css'
+import ProtectedRoute from './components/Routes/ProtectedRoute'
+import Footer from './components/Footer'
+
+toast.configure()
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -48,7 +56,8 @@ const useStyles = createUseStyles(() => ({
     minHeight: '100vh',
     width: '100vw',
     overflow: 'hidden',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    background: '#2d3159'
   }
 }))
 
@@ -63,19 +72,19 @@ function App() {
             <div className={classes.app}>
               <Navbar />
               <Switch>
+                <Route exact path="/">
+                  <LandingPage />
+                </Route>
                 <Route path="/login">
                   <LoginPage />
                 </Route>
                 <Route path="/signup">
                   <SignupPage />
                 </Route>
-                <Route path="/dashboard">
-                  <DashboardPage />
-                </Route>
-                <Route path="/santa">
-                  <SantaIndexPage />
-                </Route>
+                <ProtectedRoute path="/dashboard" component={DashboardPage} />
+                <ProtectedRoute path="/santa" component={SantaIndexPage} />
               </Switch>
+              <Footer />
             </div>
           </AuthIsLoaded>
         </BrowserRouter>
