@@ -106,7 +106,12 @@ const useStyles = createUseStyles({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      flexWrap: 'wrap'
+      flexWrap: 'wrap',
+
+      '& h4': {
+        fontSize: 16,
+        marginLeft: 0
+      }
     },
     exchangeCard: {
       width: '90vw'
