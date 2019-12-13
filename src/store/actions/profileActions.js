@@ -10,9 +10,9 @@ const addProfileDetailsAction = (firestore, profileId, profile) => {
       .then(() => {
         dispatch({ type: 'ADD_PROFILE', profile })
       })
-      .catch((err) => {
-        console.log(err)
-      })
+      .catch((() => {
+        dispatch({ type: 'ADD_PROFILE_ERROR', profile })
+      }))
   }
 }
 

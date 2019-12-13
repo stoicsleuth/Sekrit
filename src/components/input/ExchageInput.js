@@ -43,7 +43,7 @@ const useStyles = createUseStyles(() => ({
 
 const ExchangeInput = ({ input, meta, icon, pretext, type, ...props }) => {
   const classes = useStyles({ meta, input })
-  const error = meta.touched && meta.error
+  const error = meta && meta.touched && meta.error
 
   return (
     <Fragment>

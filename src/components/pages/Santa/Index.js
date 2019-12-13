@@ -1,8 +1,9 @@
 import { createUseStyles } from 'react-jss'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { useCallback } from 'react'
-import { Route, Link, useRouteMatch } from 'react-router-dom'
+import { Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 import { useFirestore } from 'react-redux-firebase'
+import { toast } from 'react-toastify'
 
 import ExchangeInputForm from '../../forms/ExchangeInputForm'
 import SantaWave from '../../blobs/SantaWave'
@@ -126,16 +127,20 @@ const SantaIndexPage = () => {
   const fireStore = useFirestore()
   const match = useRouteMatch()
   const isLoading = useProgressBar()
+  const history = useHistory()
 
   const profileId = useSelector((state) => state.firebase.auth.uid)
 
-  const signIn = useCallback(
+  const addProfileDetails = useCallback(
     (credentials) => dispatch(addProfileDetailsAction(fireStore, profileId, credentials)),
     [ dispatch, fireStore, profileId ]
   )
 
   const handleSubmit = (credentials) => {
-    signIn(credentials)
+    console.log(credentials)
+    addProfileDetails(credentials)
+    history.push('/dashboard')
+    toast.success('Your details are saved!')
   }
 
   return (

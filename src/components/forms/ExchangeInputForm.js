@@ -2,6 +2,7 @@
 import React, { useRef, Fragment } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Form, FormSpy, Field } from 'react-final-form'
+import { OnChange } from 'react-final-form-listeners'
 
 import ExchangeInput from '../input/ExchageInput'
 import useProgressBar from '../progressbar/useProgressBar'
@@ -83,13 +84,30 @@ const ExchangeInputForm = ({ onFormSubmit }) => {
   const valuesRef = useRef()
   const isLoading = useProgressBar(1500)
 
+  const changePincode = async (pincode, form) => {
+    if (pincode && pincode.length === 6) {
+      try {
+        const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+        const postOffices = await response.json()
+
+        valuesRef.current = postOffices[0].PostOffice[0].State
+      } catch (err) {
+        valuesRef.current = 'Enter a valid pincode'
+      }
+      form.change("state", valuesRef.current)
+    }
+  }
+
   return (
     <Fragment>
       <Progress isAnimating={isLoading} />
       <Form
         validate={validate}
         onSubmit={onFormSubmit}
-        render={({ handleSubmit, hasValidationErrors, submitting }) => (
+        initialValues={{
+          state: ''
+        }}
+        render={({ form, handleSubmit, hasValidationErrors, submitting }) => (
           <form onSubmit={handleSubmit} className={classes.form}>
             <FormSpy
               subscription={{ values: true }}
@@ -130,10 +148,12 @@ const ExchangeInputForm = ({ onFormSubmit }) => {
               placeholder=""
               pretext="What's your pincode? *"
             />
+            <OnChange name="pincode">
+              {(pincode) => changePincode(pincode, form)}
+            </OnChange>
             <Field
               component={ExchangeInput}
               name="state"
-              placeholder={valuesRef.current}
               pretext="You're from"
               disabled
             />
