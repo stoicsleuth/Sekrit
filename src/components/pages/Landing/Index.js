@@ -92,7 +92,7 @@ const LandingPage = () => {
     <div className={classes.landinPageWrapper}>
       <section className={classes.header}>
         <img className={classes.headerImage} src="/static/icons/people.svg" alt="people" />
-        <h2 className={classes.headerText}>A brand new Gift-Exchaging platform.</h2>
+        <h2 className={classes.headerText}>A brand new Gift-Exchanging platform.</h2>
       </section>
       <section className={classes.introSection}>
         <div className={classes.introCard}>
