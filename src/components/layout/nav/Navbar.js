@@ -40,6 +40,17 @@ const useStyles = createUseStyles(() => {
       background: '#fff',
       color: 'black'
     },
+    logoWrapper: {
+      position: 'relative'
+    },
+    vTag: {
+      position: 'absolute',
+      fontSize: 12,
+      color: 'white',
+      top: 37,
+      right: 12,
+      fontFamily: 'Montserrat, sans-serif'
+    },
     '@media (max-width: 800px)': {
       navbar: {
         padding: [ 17, 10 ],
@@ -53,6 +64,10 @@ const useStyles = createUseStyles(() => {
       },
       logo: {
         width: 100
+      },
+      vTag: {
+        top: 25,
+        right: 8
       }
     }
   }
@@ -73,9 +88,10 @@ const Navbar = () => {
 
   return (
     <div className={classes.navbar}>
-      <div>
+      <div className={classes.logoWrapper}>
         <Link to="/">
           <img className={classes.logo} src="/static/icons/logo.png" alt="Logo" />
+          <span className={classes.vTag}>v0.1.0</span>
         </Link>
       </div>
       {isLoggedOut
