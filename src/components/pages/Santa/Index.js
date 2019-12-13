@@ -137,7 +137,6 @@ const SantaIndexPage = () => {
   )
 
   const handleSubmit = (credentials) => {
-    console.log(credentials)
     addProfileDetails(credentials)
     history.push('/dashboard')
     toast.success('Your details are saved!')

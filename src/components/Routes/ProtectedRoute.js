@@ -4,7 +4,6 @@ import { Route, useHistory } from 'react-router-dom'
 
 const ProtectedRoute = ({ component: Component, ...props }) => {
   const profile = useSelector((state) => state.firebase.profile)
-  console.log(profile)
   const history = useHistory()
 
   if (profile.isLoaded && profile.isEmpty) {
