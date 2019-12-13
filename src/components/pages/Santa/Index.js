@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import { createUseStyles } from 'react-jss'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { useCallback } from 'react'
+import React, { useCallback, Fragment } from 'react'
 import { Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
-import { useFirestore } from 'react-redux-firebase'
+import { useFirestore, useFirestoreConnect } from 'react-redux-firebase'
 import { toast } from 'react-toastify'
 
 import ExchangeInputForm from '../../forms/ExchangeInputForm'
@@ -90,6 +91,12 @@ const useStyles = createUseStyles(() => ({
     marginLeft: 15,
     zIndex: 1
   },
+  hasProfileText: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'white',
+    marginBottom: 100
+  },
   '@media (min-width: 1600px)': {
     santaHeader: {
       height: 700
@@ -128,8 +135,13 @@ const SantaIndexPage = () => {
   const match = useRouteMatch()
   const isLoading = useProgressBar()
   const history = useHistory()
+  useFirestoreConnect('profiles')
 
   const profileId = useSelector((state) => state.firebase.auth.uid)
+  const profiles = useSelector((state) => state.firestore.ordered.profiles)
+
+  const hasProfile = profiles && profiles.some((profile) => profile.id === profileId)
+  const initialValues = profiles && profiles.filter((profile) => profile.id === profileId)[0]
 
   const addProfileDetails = useCallback(
     (credentials) => dispatch(addProfileDetailsAction(fireStore, profileId, credentials)),
@@ -139,7 +151,6 @@ const SantaIndexPage = () => {
   const handleSubmit = (credentials) => {
     addProfileDetails(credentials)
     history.push('/dashboard')
-    toast.success('Your details are saved!')
   }
 
   return (
@@ -181,7 +192,20 @@ const SantaIndexPage = () => {
       <Route
         path={`${match.path}/profile`}
         render={(props) => (
-          <ExchangeInputForm onFormSubmit={handleSubmit} {...props} />
+          <Fragment>
+            {hasProfile && (
+              <div className={classes.hasProfileText}>
+                Good job, you&apos;ve already submitted your details. 🙌
+                You can edit below.
+              </div>
+            )}
+            <ExchangeInputForm
+              buttonLabel={hasProfile ? 'Edit' : 'Submit'}
+              onFormSubmit={handleSubmit}
+              initialValues={initialValues}
+              {...props}
+            />
+          </Fragment>
         )}
       />
       <Route

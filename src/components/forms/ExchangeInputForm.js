@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-escape */
+import PropTypes from 'prop-types'
 import React, { useRef, Fragment } from 'react'
 import { createUseStyles } from 'react-jss'
 import { Form, FormSpy, Field } from 'react-final-form'
@@ -64,22 +65,31 @@ const validate = (formValues) => {
 }
 
 // TODO: Consolidate Button Styles & remove this abomination
-const ExchangeButton = ({ disabled }) => {
+const ExchangeButton = ({ disabled, label }) => {
   const classes = useButtonStyles({ disabled })
 
   return (
     <button
-      label="LOG IN"
       disabled={disabled}
       type="submit"
       className={classes.submitButton}
     >
-      Submit
+      {label}
     </button>
   )
 }
 
-const ExchangeInputForm = ({ onFormSubmit }) => {
+ExchangeButton.propTypes = {
+  disabled: PropTypes.bool,
+  label: PropTypes.string
+}
+
+ExchangeButton.defaultProps = {
+  disabled: false,
+  label: 'Submit'
+}
+
+const ExchangeInputForm = ({ buttonLabel, initialValues, onFormSubmit }) => {
   const classes = useStyles()
   const valuesRef = useRef()
   const isLoading = useProgressBar(1500)
@@ -94,7 +104,7 @@ const ExchangeInputForm = ({ onFormSubmit }) => {
       } catch (err) {
         valuesRef.current = 'Enter a valid pincode'
       }
-      form.change("state", valuesRef.current)
+      form.change('state', valuesRef.current)
     }
   }
 
@@ -105,7 +115,7 @@ const ExchangeInputForm = ({ onFormSubmit }) => {
         validate={validate}
         onSubmit={onFormSubmit}
         initialValues={{
-          state: ''
+          ...initialValues
         }}
         render={({ form, handleSubmit, hasValidationErrors, submitting }) => (
           <form onSubmit={handleSubmit} className={classes.form}>
@@ -176,7 +186,7 @@ const ExchangeInputForm = ({ onFormSubmit }) => {
               placeholder="2441139"
               pretext="And your phone number (This will help your Santa to send the gift)"
             />
-            <ExchangeButton disabled={hasValidationErrors || submitting} />
+            <ExchangeButton disabled={hasValidationErrors || submitting} label={buttonLabel} />
           </form>
         )}
       />
